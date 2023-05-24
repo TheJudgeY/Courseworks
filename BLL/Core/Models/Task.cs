@@ -13,5 +13,6 @@ namespace Core.Models
         public string Description { get; set; }
         public DateTime Deadline { get; set; }
         public Priority Priority { get; set; }
+        public User ResponsibleUser { get; set; }
     }
 }

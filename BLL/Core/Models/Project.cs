@@ -8,5 +8,8 @@ namespace Core.Models
 {
     public class Project : BaseEntity
     {
+        public string Name { get; set; }
+        public List<User> AvailibleUsers { get; set; }
+        public List<User> AssignedUsers { get; set; }
     }
 }
