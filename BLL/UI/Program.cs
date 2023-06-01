@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Enums
+namespace UI
 {
-    public enum Duty
+    internal class Program
     {
-        Unassigned,
-        Developer,
-        Tester,
-        StateManager
+        static async Task Main(string[] args)
+        {
+
+        }
     }
 }

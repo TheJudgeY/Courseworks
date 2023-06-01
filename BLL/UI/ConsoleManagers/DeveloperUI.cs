@@ -1,27 +1,32 @@
-﻿using BLL.Abstractions.Interfaces;
-using Core.Models;
+﻿using Core.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace UI.ConsoleManagers
 {
-    public class StateManagerUI
+    public class DeveloperUI
     {
-        private readonly ProjectUI _projectUI;
         public async Task PerformOperationsAsync(User user)
         {
-            Dictionary<string, Func<Task>> actions = new Dictionary<string, Func<Task>>()
+            Dictionary<string, Func<Task>> actions = new Dictionary<string, Func<Task>>
             {
-                { "1", ListProjects},
+                { "1", SignUpAsync },
+                { "2", LogIn }
             };
 
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Booking operations:\n" +
-                    "1. Display all projects\n" +
-                    "2. ");
-                //Кто создает проект?
+                Console.WriteLine("Greetings!\n" +
+                "===========================================\n" +
+                "Please choose one of the following options:\n" +
+                "1. Sign up\n" +
+                "2. Sign in\n" +
+                "3. Exit");
 
-                Console.Write("Enter the operation number: ");
                 string input = Console.ReadLine();
 
                 if (input == "3")
@@ -39,12 +44,6 @@ namespace UI.ConsoleManagers
                     Console.WriteLine("Invalid operation number.");
                 }
             }
-        }
-
-        public async Task ListProjects()
-        {
-            Console.Clear();
-            await _projectUI.DisplayAllProjectsAsync();
         }
     }
 }

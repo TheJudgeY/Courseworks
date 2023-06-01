@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Core.Enums
 {
-    public enum Duty
+    public enum Status
     {
-        Unassigned,
-        Developer,
-        Tester,
-        StateManager
+        Planned,
+        Developing,
+        Testing,
+        Done
     }
 }
