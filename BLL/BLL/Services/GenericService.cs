@@ -114,12 +114,5 @@ namespace BLL.Services
                 throw new Exception($"Failed to get {typeof(T).Name} by Id {Id}. Exception: {ex.Message}");
             }
         }
-
-        public virtual async Task<int> GetId(T obj, int input)
-        {
-            var result = await GetAll();
-            T chosenClass = result.ElementAt(input - 1);
-            return await Task.FromResult(chosenClass.Id);
-        }
     }
 }

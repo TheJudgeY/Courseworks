@@ -10,7 +10,7 @@ namespace DAL.Services
 
         private readonly string _filePath;
 
-        public Storage(string filePath = null)
+        public Storage(string? filePath = null)
         {
             _filePath = filePath ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{typeof(T).Name}.json");
             EnsureFileExists();
@@ -42,10 +42,29 @@ namespace DAL.Services
             }
         }
 
-        public async Task<Result<bool>> AddAsync(T obj)
+        private async Task<int> GetMaxIdAsync()
         {
             try
             {
+                var items = await GetAllItemsAsync();
+                if (items.Any()) 
+                {
+                    return items.Select(i => i.Id).Max();
+                }
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<Result<bool>> AddAsync(T obj)
+        {
+            try
+            { 
+                obj.Id = await GetMaxIdAsync() + 1;
                 var items = await GetAllItemsAsync();
                 items.Add(obj);
                 await SaveItemsAsync(items);

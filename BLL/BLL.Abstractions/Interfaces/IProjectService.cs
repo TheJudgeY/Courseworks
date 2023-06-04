@@ -1,14 +1,13 @@
-﻿using Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BLL.Abstractions.Models;
+using Core.Models;
 
 namespace BLL.Abstractions.Interfaces
 {
     public interface IProjectService : IGenericService<Project>
     {
-        Task CreateProject(string name, string description, List<User> abailibleUsers);
+        Task<ProjectServiceModel> CreateProject(ProjectServiceModel model);
+        Task<List<ProjectServiceModel>> GetProjects();
+        Task<ProjectServiceModel> GetProjectById(int id);
+        Task UpdateProject(ProjectServiceModel projectModel);
     }
 }

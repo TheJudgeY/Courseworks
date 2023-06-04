@@ -1,47 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BLL.Abstractions.Interfaces;
+using BLL.Abstractions.Models;
+using Core.Enums;
 using Core.Models;
+using UI.Interfaces;
 
 namespace UI.ConsoleManagers
 {
     public class TesterUI
     {
-        public async Task PerformOperationsAsync(User user)
-        {
-            Dictionary<string, Func<Task>> actions = new Dictionary<string, Func<Task>>
-            {
-                { "1", SignUpAsync },
-                { "2", LogIn }
-            };
+        private readonly AssignmentUI _assignmentUI;
+        private readonly IProjectService _projectService;
+        private readonly IUserService _userService;
 
-            while (true)
+        public TesterUI(AssignmentUI assignmentUI, IProjectService projectService, IUserService userService) 
+        {
+            _assignmentUI = assignmentUI;
+            _projectService = projectService;
+            _userService = userService;
+        }
+        public async Task PerformOperationsAsync(int projectId, int userId)
+        {
+            ProjectServiceModel project = await _projectService.GetProjectById(projectId);
+            UserServiceModel user = await _userService.GetUserById(userId);
+
+            bool exit = false;
+            while (!exit)
             {
                 Console.Clear();
-                Console.WriteLine("Greetings!\n" +
-                "===========================================\n" +
-                "Please choose one of the following options:\n" +
-                "1. Sign up\n" +
-                "2. Sign in\n" +
+                Console.WriteLine("Please choose one of the following options:\n" +
+                "1. Choose Assignment\n" +
+                "2. Exit");
+
+                string? input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1":
+                        await AssignmentInteraction(project, user);
+                        break;
+                    case "2":
+                        Console.Clear();
+                        exit = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input");
+                        break;
+                }
+            }
+        }
+
+        private async Task AssignmentInteraction(ProjectServiceModel project, UserServiceModel user)
+        {
+            AssignmentServiceModel assignment = await _assignmentUI.ChooseAssignment(project, user);
+            if (assignment != null)
+            {
+                await UpdateAssignment(assignment, project);
+            }
+
+            Console.WriteLine("No acess to the assignment. No actions were performed");
+        }
+
+        private async Task UpdateAssignment(AssignmentServiceModel assignment, ProjectServiceModel project)
+        {
+            Console.WriteLine("Please choose one of the following options:\n" +
+                "1. Hand Assignment\n" +
+                "2. Upload File\n" +
                 "3. Exit");
 
-                string input = Console.ReadLine();
-
-                if (input == "3")
+            bool exit = false;
+            string input = Console.ReadLine();
+            while (!exit)
+            {
+                switch (input)
                 {
-                    Console.Clear();
-                    break;
-                }
-
-                if (actions.ContainsKey(input))
-                {
-                    await actions[input]();
-                }
-                else
-                {
-                    Console.WriteLine("Invalid operation number.");
+                    case "1":
+                        await _assignmentUI.ChangeExecutor(assignment, project);
+                        break;
+                    case "2":
+                        await _assignmentUI.AddFile(assignment);
+                        break;
+                    case "3":
+                        Console.Clear();
+                        exit = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input");
+                        break;
                 }
             }
         }

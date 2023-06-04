@@ -20,7 +20,5 @@ namespace BLL.Abstractions.Interfaces
         Task<T> GetByPredicate(Func<T, bool> predicate);
 
         Task Update(int id, T obj);
-
-        Task<int> GetId(T obj, int input);
     }
 }

@@ -11,6 +11,7 @@ namespace Core.Enums
         Planned,
         Developing,
         Testing,
+        Revision,
         Done
     }
 }

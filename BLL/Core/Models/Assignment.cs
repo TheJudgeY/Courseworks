@@ -1,9 +1,4 @@
 ﻿using Core.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Models
 {
@@ -11,16 +6,10 @@ namespace Core.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime Deadline { get; set; }
+        public DateTime EstimatedTime { get; set; }
         public Priority Priority { get; set; }
         public Status Status { get; set; }
-        public User ResponsibleUser { get; set; }
-        public List<User> Workers { get; set; }
-        private static int _lastAssignedId = 0;
-
-        public Assignment()
-        {
-            Id = ++_lastAssignedId;
-        }
+        public int ProjectId { get; set; }
+        public int UserId { get; set; }
     }
 }

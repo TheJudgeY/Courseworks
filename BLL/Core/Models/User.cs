@@ -14,13 +14,5 @@ namespace Core.Models
         public string LastName { get; set; }
         public string PasswordHash { get; set; }
         public string Email { get; set; }
-        public Duty Duty { get; set; }
-        public bool IsBuisy { get; set; }
-        private static int _lastAssignedId = 0;
-
-        public User()
-        {
-            Id = ++_lastAssignedId;
-        }
     }
 }

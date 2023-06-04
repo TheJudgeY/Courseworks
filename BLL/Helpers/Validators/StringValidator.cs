@@ -28,5 +28,30 @@ namespace Helpers.Validators
 
             return false;
         }
+
+        public static bool IsValidFilePath(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return false;
+            }
+
+            char[] invalidPathChars = Path.GetInvalidPathChars();
+            if (filePath.IndexOfAny(invalidPathChars) >= 0)
+            {
+                return false;
+            }
+
+            try
+            {
+                Path.GetFullPath(filePath);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
+
