@@ -205,7 +205,7 @@ namespace UI.ConsoleManagers
                 {
                     Console.WriteLine("You are currently not assigned for that project. Please contact HR if there is an issue.");
                     Console.WriteLine("Would you like to rechoose the project or exit? (Enter 'R' to rechoose or 'E' to exit)");
-                    string input = Console.ReadLine();
+                    string input = StringValidator.ReadLineOrDefault();
                     if (input.ToUpper() == "E")
                     {
                         exit = true;

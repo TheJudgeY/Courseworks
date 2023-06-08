@@ -1,5 +1,4 @@
-﻿using Core.Enums;
-using Core.Models;
+﻿using Core.Models;
 
 public class User : BaseEntity
 {

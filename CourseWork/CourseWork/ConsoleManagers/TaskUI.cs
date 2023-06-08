@@ -4,7 +4,6 @@ using UI.Interfaces;
 using Task = System.Threading.Tasks.Task;
 using Helpers;
 using Core.Enums;
-using System.Threading.Tasks;
 using Helpers.Validators;
 
 namespace UI.ConsoleManagers
@@ -13,12 +12,10 @@ namespace UI.ConsoleManagers
     {
         private readonly IProjectService _projectService;
         private readonly IUserService _userService;
-        private readonly IUserProjectRoleService _userProjectRoleService;
-        public TaskUI(ITaskService service, IProjectService projectService, IUserService userService, IUserProjectRoleService userProjectRoleService) : base(service)
+        public TaskUI(ITaskService service, IProjectService projectService, IUserService userService) : base(service)
         {
             _projectService = projectService;
             _userService = userService;
-            _userProjectRoleService = userProjectRoleService;
         }
 
         public async Task DisplayTasks(Project project)

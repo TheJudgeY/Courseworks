@@ -1,8 +1,6 @@
 ﻿using BLL.Abstractions.Interfaces;
-using BLL.Services;
 using Core.Models;
 using Helpers.Validators;
-using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
 
 namespace UI.ConsoleManagers

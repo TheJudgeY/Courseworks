@@ -18,15 +18,12 @@ namespace BLL.Services
             byte[] data = File.ReadAllBytes(filePath);
             long size = data.Length;
 
-            // Check if directory with name {task.Name} {task.Id} exists
             string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), $"{task.Name} {task.Id}");
             if (!Directory.Exists(directoryPath))
             {
-                // Create directory if it doesn't exist
                 Directory.CreateDirectory(directoryPath);
             }
 
-            // Move file to new directory
             string newFilePath = Path.Combine(directoryPath, fileName);
             File.Move(filePath, newFilePath);
 

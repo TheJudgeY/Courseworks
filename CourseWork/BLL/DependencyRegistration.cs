@@ -1,7 +1,6 @@
 ﻿using BLL.Abstractions.Interfaces;
 using BLL.Services;
 using Microsoft.Extensions.DependencyInjection;
-using DAL;
 
 namespace BLL
 {
