@@ -1,5 +1,6 @@
 ﻿using BLL.Abstractions.Interfaces;
 using Core.Models;
+using Helpers.Validators;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
 
@@ -60,7 +61,7 @@ namespace UI.ConsoleManagers
                 "4. Exit");
 
             bool exit = false;
-            string input = Console.ReadLine();
+            string input = StringValidator.ReadLineOrDefault();
             while (!exit)
             {
                 switch (input)

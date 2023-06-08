@@ -29,28 +29,10 @@ namespace Helpers.Validators
             return false;
         }
 
-        public static bool IsValidFilePath(string filePath)
+        public static string ReadLineOrDefault()
         {
-            if (string.IsNullOrEmpty(filePath))
-            {
-                return false;
-            }
-
-            char[] invalidPathChars = Path.GetInvalidPathChars();
-            if (filePath.IndexOfAny(invalidPathChars) >= 0)
-            {
-                return false;
-            }
-
-            try
-            {
-                Path.GetFullPath(filePath);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            string input = Console.ReadLine();
+            return input ?? string.Empty;
         }
     }
 }

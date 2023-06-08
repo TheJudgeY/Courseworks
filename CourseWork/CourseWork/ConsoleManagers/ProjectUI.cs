@@ -2,7 +2,7 @@
 using BLL.Abstractions.Interfaces;
 using UI.Interfaces;
 using Task = System.Threading.Tasks.Task;
-using Core.Enums;
+using Helpers.Validators;
 
 namespace UI.ConsoleManagers
 {
@@ -33,10 +33,10 @@ namespace UI.ConsoleManagers
         public async Task CreateNewProject(User user)
         {
             Console.WriteLine("Please enter the name of the project:");
-            string? name = Console.ReadLine();
+            string name = StringValidator.ReadLineOrDefault();
 
             Console.WriteLine("Please enter the description:");
-            string? description = Console.ReadLine();
+            string description = StringValidator.ReadLineOrDefault();
 
             List<User> users = new List<User>();
             users.Add(user);
@@ -66,7 +66,7 @@ namespace UI.ConsoleManagers
 
             while (true)
             {
-                string? input = Console.ReadLine();
+                string input = StringValidator.ReadLineOrDefault();
 
                 if (input.ToUpper() == "E")
                 {
@@ -84,14 +84,6 @@ namespace UI.ConsoleManagers
                 {
                     return await GetByIdAsync(projectId);
                 }
-            }
-        }
-
-        public async Task DisplayAllProjectWorkersAsync(Project project)
-        {
-            foreach (User worker in project.Workers)
-            {
-                Console.WriteLine($" - {worker.Id}: {worker.FirstName} {worker.LastName}");
             }
         }
     }

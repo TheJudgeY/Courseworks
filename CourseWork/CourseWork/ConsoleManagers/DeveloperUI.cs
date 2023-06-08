@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using Helpers.Validators;
 using Task = System.Threading.Tasks.Task;
 
 namespace UI.ConsoleManagers
@@ -58,7 +59,7 @@ namespace UI.ConsoleManagers
                 "4. Exit");
 
             bool exit = false;
-            string input = Console.ReadLine();
+            string input = StringValidator.ReadLineOrDefault();
             while (!exit)
             {
                 switch (input)

@@ -5,6 +5,7 @@ using Task = System.Threading.Tasks.Task;
 using Helpers;
 using Core.Enums;
 using System.Threading.Tasks;
+using Helpers.Validators;
 
 namespace UI.ConsoleManagers
 {
@@ -21,11 +22,11 @@ namespace UI.ConsoleManagers
 
         public async Task DisplayTasks(Project project)
         {
-            Console.Clear();
+            await Console.Out.WriteLineAsync(string.Empty);
             var result = project.Tasks;
             foreach (Core.Models.Task task in result)
             {
-                Console.WriteLine($"================Assignment #{task.Id}=========================\n" +
+                await Console.Out.WriteLineAsync($"================Assignment #{task.Id}=========================\n" +
                                   $"\n{task.Name} -- {task.Status}\n" +
                                   $"\n====================================================================\n" +
                                   $"\nDescription:\n" +
@@ -34,25 +35,27 @@ namespace UI.ConsoleManagers
                                   $"\nAttachments:");
                 foreach (Attachment attachment in task.Attachments)
                 {
-                    Console.WriteLine($" - {attachment.FileName}");
+                    await Console.Out.WriteLineAsync($" - {attachment.FileName}");
                 }
             }
         }
 
         public async Task CreateTask(Project project, User user)
         {
+            Console.Clear();
+
             Console.WriteLine("Please enter the name of the assignment:");
-            string? name = Console.ReadLine();
+            string name = StringValidator.ReadLineOrDefault();
 
             Console.WriteLine("Please enter description:");
-            string? description = Console.ReadLine();
+            string description = StringValidator.ReadLineOrDefault();
 
             DateTime estimatedTime = DateTime.MinValue;
             bool validDate = false;
             while (!validDate)
             {
                 Console.WriteLine("Please give an estimated deadline (e.g. 2022-12-31):");
-                string input = Console.ReadLine();
+                string input = StringValidator.ReadLineOrDefault();
                 if (DateTime.TryParse(input, out estimatedTime))
                 {
                     Console.WriteLine("Estimated deadline: " + estimatedTime);
@@ -97,7 +100,7 @@ namespace UI.ConsoleManagers
             while (true)
             {
                 Console.Write("Enter priority: ");
-                string input = await Task.Run(Console.ReadLine);
+                string input = await Task.Run(StringValidator.ReadLineOrDefault);
                 if (Enum.TryParse(input, out chosenPriority))
                 {
                     break;
@@ -125,7 +128,7 @@ namespace UI.ConsoleManagers
 
             while (true)
             {
-                string? input = Console.ReadLine();
+                string input = StringValidator.ReadLineOrDefault();
 
                 if (input.ToUpper() == "E")
                 {
@@ -177,7 +180,7 @@ namespace UI.ConsoleManagers
         public async Task AddFile(Core.Models.Task task)
         {
             Console.WriteLine("Please enter the file path:");
-            string filePath = Console.ReadLine();
+            string filePath = StringValidator.ReadLineOrDefault();
 
             await Service.CreateAttachment(filePath, task);
         }

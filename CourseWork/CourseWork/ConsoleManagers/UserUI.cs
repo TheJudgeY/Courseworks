@@ -35,7 +35,7 @@ namespace UI.ConsoleManagers
                 Console.WriteLine("3. Exit");
 
                 Console.Write("Enter the operation number: ");
-                string input = Console.ReadLine();
+                string input = StringValidator.ReadLineOrDefault();
 
                 if (input == "3")
                 {
@@ -59,20 +59,20 @@ namespace UI.ConsoleManagers
             Console.Clear();
 
             Console.WriteLine("Please enter your First Name:");
-            string firstName = Console.ReadLine();
+            string firstName = StringValidator.ReadLineOrDefault();
 
             Console.WriteLine("Please enter your Last Name:");
-            string lastName = Console.ReadLine();
+            string lastName = StringValidator.ReadLineOrDefault();
 
             string email = "";
             while (!StringValidator.isValidEmail(email))
             {
                 Console.WriteLine("Please enter your email:");
-                email = Console.ReadLine();
+                email = StringValidator.ReadLineOrDefault();
             }
 
             Console.WriteLine("Please create a password:");
-            string password = Console.ReadLine();
+            string password = StringValidator.ReadLineOrDefault();
 
             User user = new User()
             {
@@ -109,11 +109,11 @@ namespace UI.ConsoleManagers
                 while (!StringValidator.isValidEmail(email))
                 {
                     Console.WriteLine("Please enter your email:");
-                    email = Console.ReadLine();
+                    email = StringValidator.ReadLineOrDefault();
                 }
 
                 Console.WriteLine("Please enter a password:");
-                string password = Console.ReadLine();
+                string password = StringValidator.ReadLineOrDefault();
 
                 var result = await GetAllAsync();
                 bool authenticated = false;
@@ -131,7 +131,7 @@ namespace UI.ConsoleManagers
                 {
                     Console.WriteLine("Invalid username or password\n" +
                         "Would you like to try again? (Y/N)");
-                    string input = Console.ReadLine();
+                    string input = StringValidator.ReadLineOrDefault();
                     if (input.ToUpper() == "N")
                     {
                         exit = true;
@@ -152,7 +152,7 @@ namespace UI.ConsoleManagers
                 "2. Choose Project\n" +
                 "3. See Notifications");
 
-                string input = Console.ReadLine();
+                string input = StringValidator.ReadLineOrDefault();
                 switch (input)
                 {
                     case "1":
@@ -191,7 +191,7 @@ namespace UI.ConsoleManagers
                 {
                     Console.WriteLine("You are currently not assigned to this project.");
                     Console.WriteLine("Would you like to rechoose the project or exit? (Enter 'R' to rechoose or 'E' to exit)");
-                    string input = Console.ReadLine();
+                    string input = StringValidator.ReadLineOrDefault();
                     if (input.ToUpper() == "E")
                     {
                         exit = true;
@@ -207,7 +207,7 @@ namespace UI.ConsoleManagers
                 await Console.Out.WriteLineAsync("==================================================\n");
                 foreach (string notification in user.Notifications)
                 {
-                    await Console.Out.WriteLineAsync($"{notification}");
+                    await Console.Out.WriteLineAsync($"Notification: {notification}");
                 }
                 await Console.Out.WriteLineAsync("\n================================================");
             }

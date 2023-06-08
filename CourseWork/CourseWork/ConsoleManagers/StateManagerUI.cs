@@ -1,6 +1,7 @@
 ﻿using BLL.Abstractions.Interfaces;
 using Core.Enums;
 using Core.Models;
+using Helpers.Validators;
 using Task = System.Threading.Tasks.Task;
 
 namespace UI.ConsoleManagers
@@ -66,11 +67,11 @@ namespace UI.ConsoleManagers
             {
                 case "1":
                     Console.WriteLine("Please enter new name:");
-                    project.Name = Console.ReadLine();
+                    project.Name = StringValidator.ReadLineOrDefault();
                     break;
                 case "2":
                     Console.WriteLine("Please enter new Description:");
-                    project.Description = Console.ReadLine();
+                    project.Description = StringValidator.ReadLineOrDefault();
                     break;
                 case "3":
                     await _taskUI.CreateTask(project, user);
@@ -152,7 +153,7 @@ namespace UI.ConsoleManagers
                 "2. Close assignment\n" +
                 "3. Exit");
 
-            string? input = Console.ReadLine();
+            string input = StringValidator.ReadLineOrDefault();
             switch (input)
             {
                 case "1":
@@ -192,7 +193,7 @@ namespace UI.ConsoleManagers
             while (true)
             {
                 Console.Write("Enter duty: ");
-                string input = await Task.Run(Console.ReadLine);
+                string input = await Task.Run(StringValidator.ReadLineOrDefault);
                 if (Enum.TryParse(input, out chosenDuty))
                 {
                     break;
