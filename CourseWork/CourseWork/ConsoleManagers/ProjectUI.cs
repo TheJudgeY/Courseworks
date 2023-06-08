@@ -3,6 +3,8 @@ using BLL.Abstractions.Interfaces;
 using UI.Interfaces;
 using Task = System.Threading.Tasks.Task;
 using Helpers.Validators;
+using BLL.Services;
+using Core.Enums;
 
 namespace UI.ConsoleManagers
 {
@@ -30,7 +32,7 @@ namespace UI.ConsoleManagers
             }
         }
 
-        public async Task CreateNewProject(User user)
+        public async Task<Project> CreateNewProject(User user)
         {
             Console.WriteLine("Please enter the name of the project:");
             string name = StringValidator.ReadLineOrDefault();
@@ -48,8 +50,9 @@ namespace UI.ConsoleManagers
                 Workers = users,
                 Tasks = new List<Core.Models.Task>()
             };
-
             await CreateAsync(project);
+
+            return project;
         }
 
         public async Task<Project> GetProjectAsync()

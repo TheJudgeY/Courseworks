@@ -7,6 +7,7 @@ using Helpers;
 using Core.Enums;
 using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations;
+using BLL.Services;
 
 namespace UI.ConsoleManagers
 {
@@ -14,10 +15,12 @@ namespace UI.ConsoleManagers
     {
         private readonly DutyPermission _dutyPermission;
         private readonly ProjectUI _projectUI;
-        public UserUI(IUserService service, DutyPermission dutyPermission, ProjectUI projectUI) : base(service)
+        private readonly IUserProjectRoleService _userProjectRoleService;
+        public UserUI(IUserService service, DutyPermission dutyPermission, ProjectUI projectUI, IUserProjectRoleService userProjectRoleService) : base(service)
         {
             _dutyPermission = dutyPermission;
             _projectUI = projectUI;
+            _userProjectRoleService = userProjectRoleService;
         }
 
         public async Task PerformOperationsAsync()
@@ -81,7 +84,6 @@ namespace UI.ConsoleManagers
                 LastName = lastName,
                 PasswordHashed = PasswordHasher.HashPassword(password),
                 Email = email,
-                Duty = Duty.Unassigned,
                 Notifications = new List<string>(),
                 Tasks = new List<Core.Models.Task>()
             };
@@ -90,9 +92,9 @@ namespace UI.ConsoleManagers
             if (!users.Any())
             {
                 await CreateAsync(user);
-                await _projectUI.CreateNewProject(user);
-                user.Duty = Duty.StateManager;
-                await UpdateAsync(user.Id, user);
+                Project project = await _projectUI.CreateNewProject(user);
+                await _userProjectRoleService.CreateTableRow(project, user);
+                await _userProjectRoleService.SetUserRole(project, user, Duty.StateManager);
             }
             else
             {
@@ -149,8 +151,6 @@ namespace UI.ConsoleManagers
 
             while (true)
             {
-                Console.Clear();
-
                 Console.WriteLine("Please choose one of the following options:\n" +
                 "1. Log Out\n" +
                 "2. Choose Project\n" +
@@ -180,20 +180,28 @@ namespace UI.ConsoleManagers
             bool exit = false;
             while (!exit)
             {
-                var project = await _projectUI.GetProjectAsync();
+                Project project = await _projectUI.GetProjectAsync();
                 if (project == null)
                 {
                     exit = true;
                     continue;
                 }
 
-                if (project.Workers.Any(w => w.Id == user.Id))
+                var table = await _userProjectRoleService.GetTableByProjectId(project.Id);
+
+                if (table != null)
                 {
-                    await _dutyPermission.DutyIdentifier(user, project);
+                    foreach (var row in table)
+                    {
+                        if (row.User.Id == user.Id)
+                        {
+                            await _dutyPermission.DutyIdentifier(row);
+                        }
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("You are currently not assigned to this project.");
+                    Console.WriteLine("You are currently not assigned for that project. Please contact HR if there is an issue.");
                     Console.WriteLine("Would you like to rechoose the project or exit? (Enter 'R' to rechoose or 'E' to exit)");
                     string input = StringValidator.ReadLineOrDefault();
                     if (input.ToUpper() == "E")
@@ -206,6 +214,7 @@ namespace UI.ConsoleManagers
 
         private async Task SeeNotifications(User user)
         {
+            Console.Clear();
             if (user.Notifications.Any())
             {
                 await Console.Out.WriteLineAsync("==================================================\n");

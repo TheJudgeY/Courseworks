@@ -11,6 +11,7 @@ namespace BLL
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<IUserProjectRoleService, UserProjectRoleService>();
             services.AddScoped<IProjectService, ProjectService>();
 
             DAL.DependencyRegistration.RegisterRepositories(services);

@@ -13,11 +13,12 @@ namespace UI.ConsoleManagers
     {
         private readonly IProjectService _projectService;
         private readonly IUserService _userService;
-
-        public TaskUI(ITaskService service, IProjectService projectService, IUserService userService) : base(service)
+        private readonly IUserProjectRoleService _userProjectRoleService;
+        public TaskUI(ITaskService service, IProjectService projectService, IUserService userService, IUserProjectRoleService userProjectRoleService) : base(service)
         {
             _projectService = projectService;
             _userService = userService;
+            _userProjectRoleService = userProjectRoleService;
         }
 
         public async Task DisplayTasks(Project project)
@@ -154,7 +155,8 @@ namespace UI.ConsoleManagers
             Project? project = await _projectService.GetProjectByTask(task);
             if (project != null)
             {
-                switch (user.Duty)
+                Duty duty = await _userService.GetUserDutyByIds(user, project);
+                switch (duty)
                 {
                     case Duty.Developer:
                         task.Status = Status.Developing;
@@ -197,7 +199,8 @@ namespace UI.ConsoleManagers
             Console.WriteLine("Please choose a worker:");
             foreach (User user in project.Workers)
             {
-                Console.WriteLine($" - {user.Id}: {user.FirstName} {user.LastName} || {user.Duty}");
+                Duty duty = await _userService.GetUserDutyByIds(user, project);
+                Console.WriteLine($" - {user.Id}: {user.FirstName} {user.LastName} || {duty}");
             }
 
             string? input = Console.ReadLine();

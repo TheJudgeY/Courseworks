@@ -1,4 +1,5 @@
 ﻿using BLL.Abstractions.Interfaces;
+using BLL.Services;
 using Core.Enums;
 using Core.Models;
 using Helpers.Validators;
@@ -10,12 +11,12 @@ namespace UI.ConsoleManagers
     {
         private readonly ProjectUI _projectUI;
         private readonly TaskUI _taskUI;
-        private readonly IUserService _userService;    
-        public StateManagerUI(ProjectUI projectUI, TaskUI taskUI, IUserService userService)
+        private readonly IUserProjectRoleService _userProjectRoleService;
+        public StateManagerUI(ProjectUI projectUI, TaskUI taskUI, IUserProjectRoleService userProjectRoleService)
         {
             _projectUI = projectUI;
             _taskUI = taskUI;
-            _userService = userService;
+            _userProjectRoleService = userProjectRoleService;
         }
 
         public async Task PerformOperationsAsync(User user, Project project)
@@ -129,11 +130,12 @@ namespace UI.ConsoleManagers
                     if (userAdd != null)
                     {
                         project.Workers.Add(userAdd);
+                        await _userProjectRoleService.CreateTableRow(project, userAdd);
                     }
                     break;
                 case "3":
                     User worker = await _taskUI.GetUserByProjects(project);
-                    await ChangeDuty(worker);
+                    await ChangeDuty(worker, project);
                     break;
                 case "4":
                     Console.Clear();
@@ -174,12 +176,10 @@ namespace UI.ConsoleManagers
             }
         }
 
-        public async Task ChangeDuty(User user)
+        public async Task ChangeDuty(User user, Project project)
         {
             Duty duty = await DutyChooser();
-
-            user.Duty = duty;
-            await _userService.Update(user.Id, user);
+            await _userProjectRoleService.SetUserRole(project, user, duty);
         }
 
         private async Task<Duty> DutyChooser()

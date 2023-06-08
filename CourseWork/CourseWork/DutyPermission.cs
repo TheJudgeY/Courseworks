@@ -16,18 +16,18 @@ namespace UI
             _testerUI = testerUI;
             _developerUI = developerUI;
         }
-        public async Task DutyIdentifier(User user, Project project)
+        public async Task DutyIdentifier(UserProjectRole row)
         {
-            switch (user.Duty)
+            switch (row.Duty)
             {
                 case Duty.StateManager:
-                    await _stateManagerUI.PerformOperationsAsync(user, project);
+                    await _stateManagerUI.PerformOperationsAsync(row.User, row.Project);
                     break;
                 case Duty.Tester:
-                    await _testerUI.PerformOperationsAsync(user, project);
+                    await _testerUI.PerformOperationsAsync(row.User, row.Project);
                     break;
                 case Duty.Developer:
-                    await _developerUI.PerformOperationsAsync(user, project);
+                    await _developerUI.PerformOperationsAsync(row.User, row.Project);
                     break;
                 case Duty.Unassigned:
                     throw new NotImplementedException();
