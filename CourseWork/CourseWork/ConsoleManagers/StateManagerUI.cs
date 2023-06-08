@@ -12,15 +12,20 @@ namespace UI.ConsoleManagers
         private readonly ProjectUI _projectUI;
         private readonly TaskUI _taskUI;
         private readonly IUserProjectRoleService _userProjectRoleService;
-        public StateManagerUI(ProjectUI projectUI, TaskUI taskUI, IUserProjectRoleService userProjectRoleService)
+        private readonly IUserService _userService;
+        public StateManagerUI(ProjectUI projectUI, TaskUI taskUI, IUserProjectRoleService userProjectRoleService, IUserService userService)
         {
             _projectUI = projectUI;
             _taskUI = taskUI;
             _userProjectRoleService = userProjectRoleService;
+            _userService = userService;
         }
 
-        public async Task PerformOperationsAsync(User user, Project project)
+        public async Task PerformOperationsAsync(int userId, int projectId)
         {
+            var user = await _userService.GetById(userId);
+            var project = await _projectUI.GetByIdAsync(projectId);
+
             bool exit = false;
             while (!exit)
             {
@@ -161,7 +166,7 @@ namespace UI.ConsoleManagers
             {
                 case "1":
                     User chosenUser = await _taskUI.GetUserByProjects(project);
-                    await _taskUI.ChangeExecutor(task, chosenUser);
+                    await _taskUI.ChangeExecutor(task, chosenUser, user);
                     break;
                 case "2":
                     task.Status = Status.Done;

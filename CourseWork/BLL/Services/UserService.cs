@@ -24,7 +24,7 @@ namespace BLL.Services
 
             foreach (UserProjectRole row in table)
             {
-                if (row.Project.Id == project.Id && row.User.Id == user.Id)
+                if (row.ProjectId == project.Id && row.UserId == user.Id)
                 {
                     return row.Duty;
                 }

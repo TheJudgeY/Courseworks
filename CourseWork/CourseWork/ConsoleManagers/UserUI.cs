@@ -180,6 +180,8 @@ namespace UI.ConsoleManagers
             bool exit = false;
             while (!exit)
             {
+                await _projectUI.DisplayAllProjectsAsync();
+
                 Project project = await _projectUI.GetProjectAsync();
                 if (project == null)
                 {
@@ -193,7 +195,7 @@ namespace UI.ConsoleManagers
                 {
                     foreach (var row in table)
                     {
-                        if (row.User.Id == user.Id)
+                        if (row.UserId == user.Id)
                         {
                             await _dutyPermission.DutyIdentifier(row);
                         }
@@ -203,7 +205,7 @@ namespace UI.ConsoleManagers
                 {
                     Console.WriteLine("You are currently not assigned for that project. Please contact HR if there is an issue.");
                     Console.WriteLine("Would you like to rechoose the project or exit? (Enter 'R' to rechoose or 'E' to exit)");
-                    string input = StringValidator.ReadLineOrDefault();
+                    string input = Console.ReadLine();
                     if (input.ToUpper() == "E")
                     {
                         exit = true;

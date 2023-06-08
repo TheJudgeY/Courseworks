@@ -118,11 +118,23 @@ namespace UI.ConsoleManagers
         public async Task<Core.Models.Task> ChooseTask(Project project, User user)
         {
             Console.Clear();
-            await DisplayTasks(project);
+            foreach (Core.Models.Task task in project.Tasks)
+            {
+                Console.WriteLine($"================Assignment #{task.Id}=========================\n" +
+                                  $"\n{task.Name} -- {task.Status}\n" +
+                                  $"\n====================================================================\n" +
+                                  $"\nDescription:\n" +
+                                  $"\n{StringManipulator.StringWrapper(task.Description)}\n" +
+                                  $"    \nEstimated Time: {task.EstimatedTime}\n" +
+                                  $"\nAttachments:");
+                foreach (Attachment attachment in task.Attachments)
+                {
+                    Console.WriteLine($" - {attachment.FileName}");
+                }
+            }
 
-            var tasks = await GetAllAsync();
-            Console.WriteLine("Please enter the ID of the project you want to select or 'E' to exit:");
-            foreach (Core.Models.Task task in tasks)
+            Console.WriteLine("\nPlease enter the ID of the assignment you want to select:\n");
+            foreach (Core.Models.Task task in project.Tasks)
             {
                 Console.WriteLine($"- {task.Id}: {task.Name}");
             }
@@ -131,26 +143,33 @@ namespace UI.ConsoleManagers
             {
                 string input = StringValidator.ReadLineOrDefault();
 
-                if (input.ToUpper() == "E")
+                if (!int.TryParse(input, out int assignmentId))
                 {
-                    return null;
+                    Console.WriteLine("Invalid input: please enter a valid ID.");
                 }
-                else if (!int.TryParse(input, out int taskId))
+                else if (!project.Tasks.Any(assignment => assignment.Id == assignmentId))
                 {
-                    Console.WriteLine("Invalid input: please enter a valid project ID or 'E' to exit.");
-                }
-                else if (!tasks.Any(task => task.Id == taskId))
-                {
-                    Console.WriteLine("Invalid input: no project found with that ID.");
+                    Console.WriteLine("Invalid input: no assignment found with that ID.");
                 }
                 else
                 {
-                    return await GetByIdAsync(taskId);
+                    var assignment = await Service.GetById(assignmentId);
+                    return await CheckAssignment(assignment, user);
                 }
             }
         }
 
-        public async Task ChangeExecutor(Core.Models.Task task, User user)
+        private async Task<Core.Models.Task> CheckAssignment(Core.Models.Task task, User user)
+        {
+            if (await Service.CheckAvailibilityForUser(user, task))
+            {
+                return task;
+            }
+
+            return null;
+        }
+
+        public async Task ChangeExecutor(Core.Models.Task task, User user, User previousUser)
         {
             Project? project = await _projectService.GetProjectByTask(task);
             if (project != null)
@@ -173,7 +192,10 @@ namespace UI.ConsoleManagers
                         break;
                 }
 
+                previousUser.Tasks.Remove(task);
                 user.Notifications.Add($"\n - You've been assigned for {task.Name} in {project.Name}");
+                user.Tasks.Add(task);
+                await _userService.Update(previousUser.Id, previousUser);
                 await _userService.Update(user.Id, user);
                 await UpdateAsync(task.Id, task);
             }

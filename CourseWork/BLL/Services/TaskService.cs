@@ -46,5 +46,15 @@ namespace BLL.Services
             string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), $"{task.Name} {task.Id}");
             await Task.Run(() => Process.Start("explorer.exe", directoryPath));
         }
+
+        public async Task<bool> CheckAvailibilityForUser(User user, Core.Models.Task task)
+        {
+            if (user.Tasks.Any(t => t.Id == task.Id))
+            {
+                return await Task.FromResult(true);
+            }
+
+            return await Task.FromResult(false);
+        }
     }
 }

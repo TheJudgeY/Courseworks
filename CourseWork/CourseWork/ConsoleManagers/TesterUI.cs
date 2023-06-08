@@ -1,4 +1,5 @@
 ﻿using BLL.Abstractions.Interfaces;
+using BLL.Services;
 using Core.Models;
 using Helpers.Validators;
 using System.Threading.Tasks;
@@ -9,13 +10,20 @@ namespace UI.ConsoleManagers
     public class TesterUI
     {
         private readonly TaskUI _taskUI;
+        private readonly ProjectUI _projectUI;
+        private readonly IUserService _userService;
 
-        public TesterUI(TaskUI taskUI)
+        public TesterUI(TaskUI taskUI, ProjectUI projectUI, IUserService userService)
         {
             _taskUI = taskUI;
+            _projectUI = projectUI;
+            _userService = userService;
         }
-        public async Task PerformOperationsAsync(User user, Project project)
+        public async Task PerformOperationsAsync(int userId, int projectId)
         {
+            var user = await _userService.GetById(userId);
+            var project = await _projectUI.GetByIdAsync(projectId);
+
             bool exit = false;
             while (!exit)
             {
@@ -46,13 +54,13 @@ namespace UI.ConsoleManagers
             Core.Models.Task task = await _taskUI.ChooseTask(project, user);
             if (task != null)
             {
-                await UpdateAssignment(task, project);
+                await UpdateAssignment(task, project, user);
             }
 
             Console.WriteLine("No acess to the assignment. No actions were performed");
         }
 
-        private async Task UpdateAssignment(Core.Models.Task task, Project project)
+        private async Task UpdateAssignment(Core.Models.Task task, Project project, User user)
         {
             Console.Clear();
             Console.WriteLine("Please choose one of the following options:\n" +
@@ -69,7 +77,7 @@ namespace UI.ConsoleManagers
                 {
                     case "1":
                         User chosenUser = await _taskUI.GetUserByProjects(project);
-                        await _taskUI.ChangeExecutor(task, chosenUser);
+                        await _taskUI.ChangeExecutor(task, chosenUser, user);
                         break;
                     case "2":
                         await _taskUI.AddFile(task);

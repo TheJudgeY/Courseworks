@@ -6,5 +6,6 @@ namespace BLL.Abstractions.Interfaces
     {
         Task OpenFolder(Core.Models.Task task);
         Task CreateAttachment(string filePath, Core.Models.Task task);
+        Task<bool> CheckAvailibilityForUser(User user, Core.Models.Task task);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Core.Models;
+﻿using BLL.Abstractions.Interfaces;
+using Core.Models;
 using Helpers.Validators;
 using Task = System.Threading.Tasks.Task;
 
@@ -7,13 +8,20 @@ namespace UI.ConsoleManagers
     public class DeveloperUI
     {
         private readonly TaskUI _taskUI;
+        private readonly ProjectUI _projectUI;
+        private readonly IUserService _userService;
 
-        public DeveloperUI(TaskUI taskUI)
+        public DeveloperUI(TaskUI taskUI, ProjectUI projectUI, IUserService userService)
         {
             _taskUI = taskUI;
+            _projectUI = projectUI;
+            _userService = userService;
         }
-        public async Task PerformOperationsAsync(User user, Project project)
+        public async Task PerformOperationsAsync(int userId, int projectId)
         {
+            var user = await _userService.GetById(userId);
+            var project = await _projectUI.GetByIdAsync(projectId);
+
             bool exit = false;
             while (!exit)
             {
@@ -44,13 +52,13 @@ namespace UI.ConsoleManagers
             Core.Models.Task task = await _taskUI.ChooseTask(project, user);
             if (task != null)
             {
-                await UpdateAssignment(task, project);
+                await UpdateAssignment(task, project, user);
             }
 
             Console.WriteLine("No acess to the assignment. No actions were performed");
         }
 
-        private async Task UpdateAssignment(Core.Models.Task task, Project project)
+        private async Task UpdateAssignment(Core.Models.Task task, Project project, User user)
         {
             Console.Clear();
 
@@ -68,7 +76,7 @@ namespace UI.ConsoleManagers
                 {
                     case "1":
                         User chosenUser = await _taskUI.GetUserByProjects(project);
-                        await _taskUI.ChangeExecutor(task, chosenUser);
+                        await _taskUI.ChangeExecutor(task, chosenUser, user);
                         exit = true;
                         break;
                     case "2":

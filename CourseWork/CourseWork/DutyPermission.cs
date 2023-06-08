@@ -21,16 +21,16 @@ namespace UI
             switch (row.Duty)
             {
                 case Duty.StateManager:
-                    await _stateManagerUI.PerformOperationsAsync(row.User, row.Project);
+                    await _stateManagerUI.PerformOperationsAsync(row.UserId, row.ProjectId);
                     break;
                 case Duty.Tester:
-                    await _testerUI.PerformOperationsAsync(row.User, row.Project);
+                    await _testerUI.PerformOperationsAsync(row.UserId, row.ProjectId);
                     break;
                 case Duty.Developer:
-                    await _developerUI.PerformOperationsAsync(row.User, row.Project);
+                    await _developerUI.PerformOperationsAsync(row.UserId, row.ProjectId);
                     break;
                 case Duty.Unassigned:
-                    throw new NotImplementedException();
+                    break;
                 default:
                     throw new Exception("Wrong data input");
             }

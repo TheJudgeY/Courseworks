@@ -16,8 +16,8 @@ namespace BLL.Services
         {
             UserProjectRole newTableRow = new UserProjectRole()
             {
-                Project = project,
-                User = user,
+                ProjectId = project.Id,
+                UserId = user.Id,
                 Duty = Duty.Unassigned
             };
 
@@ -28,8 +28,8 @@ namespace BLL.Services
         {
             var table = await GetAll();
 
-            foreach (var row in table.Where(r => r.Project.Id == project.Id && r.User.Id == user.Id)) 
-            { 
+            foreach (var row in table.Where(r => r.ProjectId == project.Id && r.UserId == user.Id))
+            {
                 row.Duty = duty;
                 await Update(row.Id, row);
             }
@@ -40,8 +40,8 @@ namespace BLL.Services
             var table = await GetAll();
             List<UserProjectRole> newTable = new List<UserProjectRole>();
 
-            foreach (var row in table.Where(t => t.Project.Id == id)) 
-            { 
+            foreach (var row in table.Where(t => t.ProjectId == id))
+            {
                 newTable.Add(row);
             }
 
