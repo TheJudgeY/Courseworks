@@ -30,6 +30,7 @@ namespace UI.ConsoleManagers
 
             while (true)
             {
+                Console.Clear();
                 Console.WriteLine("1. Sign Up");
                 Console.WriteLine("2. Sign In");
                 Console.WriteLine("3. Exit");
@@ -105,6 +106,8 @@ namespace UI.ConsoleManagers
             bool exit = false;
             while (!exit)
             {
+                Console.Clear();
+
                 string email = "";
                 while (!StringValidator.isValidEmail(email))
                 {
@@ -142,11 +145,12 @@ namespace UI.ConsoleManagers
 
         private async Task UserMenu(User user)
         {
-            Console.Clear();
             await SeeNotifications(user);
 
             while (true)
             {
+                Console.Clear();
+
                 Console.WriteLine("Please choose one of the following options:\n" +
                 "1. Log Out\n" +
                 "2. Choose Project\n" +

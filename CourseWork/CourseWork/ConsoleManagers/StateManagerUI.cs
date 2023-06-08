@@ -62,7 +62,7 @@ namespace UI.ConsoleManagers
                 "5. Edit Workers\n" +
                 "6. Exit");
 
-            string? input = Console.ReadLine();
+            string input = StringValidator.ReadLineOrDefault();
             switch (input)
             {
                 case "1":
@@ -113,7 +113,7 @@ namespace UI.ConsoleManagers
                 "3. Assign duty\n" +
                 "4. Exit");
 
-            string? input = Console.ReadLine();
+            string input = StringValidator.ReadLineOrDefault();
             switch (input)
             {
                 case "1":
@@ -148,6 +148,7 @@ namespace UI.ConsoleManagers
 
         private async Task UpdateTaskStateManager(Core.Models.Task task, Project project, User user)
         {
+            Console.Clear();
             Console.WriteLine("Please choose one of the following options:\n" +
                 "1. Assign worker to this Assignment\n" +
                 "2. Close assignment\n" +

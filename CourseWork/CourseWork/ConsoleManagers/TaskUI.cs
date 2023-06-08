@@ -179,6 +179,7 @@ namespace UI.ConsoleManagers
 
         public async Task AddFile(Core.Models.Task task)
         {
+            Console.Clear();
             Console.WriteLine("Please enter the file path:");
             string filePath = StringValidator.ReadLineOrDefault();
 

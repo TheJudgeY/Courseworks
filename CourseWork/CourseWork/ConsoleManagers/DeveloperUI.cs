@@ -52,6 +52,8 @@ namespace UI.ConsoleManagers
 
         private async Task UpdateAssignment(Core.Models.Task task, Project project)
         {
+            Console.Clear();
+
             Console.WriteLine("Please choose one of the following options:\n" +
                 "1. Hand Assignment\n" +
                 "2. Upload File\n" +

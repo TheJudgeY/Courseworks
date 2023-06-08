@@ -55,6 +55,7 @@ namespace UI.ConsoleManagers
         public async Task<Project> GetProjectAsync()
         {
             Console.Clear();
+
             await DisplayAllProjectsAsync();
 
             var projects = await GetAllAsync();
