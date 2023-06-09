@@ -92,7 +92,7 @@ namespace UI.ConsoleManagers
             if (!users.Any())
             {
                 await CreateAsync(user);
-                Project project = await _projectUI.CreateNewProject(user);
+                await _projectUI.CreateNewProject(user);
             }
             else
             {
