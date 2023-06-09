@@ -3,15 +3,16 @@ using BLL.Abstractions.Interfaces;
 using UI.Interfaces;
 using Task = System.Threading.Tasks.Task;
 using Helpers.Validators;
-using BLL.Services;
 using Core.Enums;
 
 namespace UI.ConsoleManagers
 {
     public class ProjectUI : ConsoleManager<IProjectService, Project>, IConsoleManager<Project>
     {
-        public ProjectUI(IProjectService projectService) : base(projectService)
+        private readonly IUserProjectRoleService _userProjectRoleService;
+        public ProjectUI(IProjectService projectService, IUserProjectRoleService userProjectRoleService) : base(projectService)
         {
+            _userProjectRoleService = userProjectRoleService;
         }
         public async Task DisplayAllProjectsAsync()
         {
@@ -51,6 +52,8 @@ namespace UI.ConsoleManagers
                 Tasks = new List<Core.Models.Task>()
             };
             await CreateAsync(project);
+            await _userProjectRoleService.CreateTableRow(project, user);
+            await _userProjectRoleService.SetUserRole(project, user, Duty.StateManager);
 
             return project;
         }

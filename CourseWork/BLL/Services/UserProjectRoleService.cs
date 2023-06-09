@@ -47,5 +47,17 @@ namespace BLL.Services
 
             return newTable;
         }
+
+        public async Task<UserProjectRole> GetRowByProjectUser(Project project, User user)
+        {
+            var table = await GetAll();
+
+            foreach (var row in table.Where(r => r.ProjectId == project.Id && r.UserId == user.Id))
+            {
+                return row;
+            }
+
+            return null;
+        }
     }
 }

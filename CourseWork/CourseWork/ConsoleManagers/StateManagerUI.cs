@@ -127,6 +127,8 @@ namespace UI.ConsoleManagers
                     if (userRemove != null)
                     {
                         project.Workers.Remove(userRemove);
+                        var row = await _userProjectRoleService.GetRowByProjectUser(project, userRemove);
+                        await _userProjectRoleService.Remove(row.Id);
                     }
                     Console.WriteLine("Something went wrong. No user removed");
                     break;

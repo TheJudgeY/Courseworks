@@ -93,8 +93,6 @@ namespace UI.ConsoleManagers
             {
                 await CreateAsync(user);
                 Project project = await _projectUI.CreateNewProject(user);
-                await _userProjectRoleService.CreateTableRow(project, user);
-                await _userProjectRoleService.SetUserRole(project, user, Duty.StateManager);
             }
             else
             {

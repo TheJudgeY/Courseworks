@@ -9,5 +9,6 @@ namespace BLL.Abstractions.Interfaces
         Task CreateTableRow(Project project, User user);
         Task<List<UserProjectRole>> GetTableByProjectId(int id);
         Task SetUserRole(Project project, User user, Duty duty);
+        Task<UserProjectRole> GetRowByProjectUser(Project project, User user);
     }
 }
